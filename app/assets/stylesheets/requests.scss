@@ -1,0 +1,42 @@
+// Place all the styles related to the Requests controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+body {
+  background-color: #F0F0F0 !important;
+}
+
+#beat-map {
+  text-align: center;
+  margin: 20px auto;
+}
+
+#search-form {
+  text-align: center;
+  margin: 50px auto 0 auto;
+}
+
+#submit-button-div {
+  margin-top: 25px;
+}
+
+
+
+#results_header {
+  font-size: 2.4em;
+
+  span {
+    color: red;
+  }
+}
+
+#totals-table, #stats-table {
+  margin-top: 28px;
+  font-size: 1.3em;
+
+  td strong {
+    font-size: 1.12em;
+  }
+}

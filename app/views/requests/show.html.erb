@@ -1,0 +1,83 @@
+<!-- Section 1 -->
+<style>
+
+  #beat-map {
+    margin-top: 200px;
+  }
+</style>
+
+<div class="col-xs-12">
+  <h1 id="results_header">Results for <span> Precinct <%= @stats[0].precinct %>, Beat <%= @stats[0].police_beat %></span> from <span> <%= Date.parse(@stats[0].report_date).strftime('%a, %-d %b %Y') %> </span> to <span> <%= Date.parse(@stats[-1].report_date).strftime('%a, %-d %b %Y') %> </span></h1>
+</div>
+
+<div class="col-sm-4">
+  <table class = "table table-hover" id="totals-table">
+    <tablebody>
+
+      <tr>
+        
+          <th>Type</th>
+          <th># of Crimes</th>
+
+      </tr>
+
+      <% @totals.each do |type, total| %>
+        <tr>
+          <td><%= type.pluralize(2) %></td>
+          <td><%= total%></td>
+        </tr>
+      <% end %>
+
+      <tr>
+        <td><strong>Total</strong></td>
+        <td><strong><%= @totals.values.inject(:+) %></strong></td>
+      </tr>
+
+    </tablebody>
+  </table>
+</div>
+
+<div class="col-sm-8">
+
+  <table class = "table table-hover" id="stats-table">
+    <tablebody>
+
+      <tr>
+        
+          <th>Type</th>
+          <th>% of All Crimes of this Type in Precinct</th>
+          <th>% of All Crimes of this Type</th>
+
+      </tr>
+
+      <% @totals.each do |type, total| %>
+        <tr>
+          <td><%= type.pluralize(2) %></td>
+          <td><%= (total / @precinct_totals[type].to_f) * 100  %></td>
+          
+        </tr>
+      <% end %>
+
+    </tablebody>
+  </table>
+
+</div>
+<!-- Section 2 -->
+<!--  
+<table class="table table-hover">
+  <tablebody>
+    <tr>
+      <th>Time Period</th>
+      <th>Type</th>
+      <th>Count</th>
+      <th></th>
+    </tr>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+  </tablebody>
+</table> -->

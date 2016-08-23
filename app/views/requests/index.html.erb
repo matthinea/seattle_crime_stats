@@ -1,0 +1,80 @@
+
+
+<%= form_tag('/results', id: "search-form") do %>
+
+  <div class="col-sm-2 col-sm-offset-1">
+    <%= label_tag :precinct %>
+
+    <%= text_field_tag :precinct, "N", class: "form-control" %>
+  </div>
+
+  <div class="col-sm-2">
+    <%= label_tag :beat %>
+
+    <%= text_field_tag :beat, "B3", class: "form-control" %>
+  </div>
+
+  <div class="col-sm-2">
+    <div class="row">
+
+      <% date_wrap_open = '<div class="col-xs-12"><div class="form-group">'.html_safe
+        date_wrap_close = '</div></div>'.html_safe
+        date_separator = "#{date_wrap_close}#{date_wrap_open}".html_safe %>
+
+      <div class="col-xs-12">
+        <div class="form-group">
+
+        <%= label_tag :from %>
+
+        <%= date_select(
+         :from_date, "date", 
+         {
+           :order => [:day, :month, :year],
+           :date_separator => date_separator,
+           :start_year => 2014,
+           :end_year => 2008
+         },
+         {:class => 'form-control'}
+         ) %>
+  
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-2">
+    <div class="row">
+
+      <% date_wrap_open = '<div class="col-xs-12"><div class="form-group">'.html_safe
+        date_wrap_close = '</div></div>'.html_safe
+        date_separator = "#{date_wrap_close}#{date_wrap_open}".html_safe %>
+
+      <div class="col-xs-12">
+        <div class="form-group">
+
+        <%= label_tag :to %>
+
+        <%= date_select(
+         :to_date, "date", 
+         {
+           :order => [:day, :month, :year],
+           :date_separator => date_separator,
+           :start_year => 2014,
+           :end_year => 2008
+         },
+         {:class => 'form-control'}
+         ) %>
+  
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-2" id="submit-button-div">
+    <%= submit_tag :Send, class: "btn btn-primary btn-lg" %>
+  </div>
+
+<% end %>
+

@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  homicides: 1
+  rapes: 1
+  robberies: 1
+  assaults: 1
+  larceny_thefts: 1
+  motor_vehicle_thefts: 1
+  burglaries: 1
+
+two:
+  homicides: 1
+  rapes: 1
+  robberies: 1
+  assaults: 1
+  larceny_thefts: 1
+  motor_vehicle_thefts: 1
+  burglaries: 1
