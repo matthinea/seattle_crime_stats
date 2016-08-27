@@ -6,12 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+require 'data'
 
-beats =[ "W3", "R3", "B2", "G2", "S1", "E2", "J2", "M3", "C2", "W1", "Q2", "O1", "L3", "U1", "Q1", "N3", "F1", "B3", "S2", "N1", "C1", "G1", "K2", "M2", "L2", "M1", "D3", "K3", "F3", "J3", "O3", "U2", "Q3", "G3", "K1", "E1", "S3", "D1", "F2", "U3", "R1", "D2", "O2", "E3", "W2", "C3", "L1", "N2", "R2", "J1", "B1"]
+precinct_beats = Data.precincts_with_beats
 
-
-precincts = ["N", "W", "SE", "E", "SW"]
-
-precincts.each {|precinct| PrecinctDatum.create(name: precinct) }
-
-
+precinct_beats.each do |precinct, beats| 
+  precinct = Precinct.create(name: precinct)
+  beats.each do |beat|
+    new_beat = Beat.create(:name => beat)
+    precinct.beats << new_beat
+    precinct.save
+  end
+end

@@ -18,66 +18,24 @@
         
           <th>Type</th>
           <th># of Crimes</th>
+          <th>% share of Crimes in Precinct during Same Period </th>
 
       </tr>
 
       <% @totals.each do |type, total| %>
         <tr>
           <td><%= type.pluralize(2) %></td>
-          <td><%= total%></td>
+          <td><%= total %></td>
+          <td><%= (total / @precinct_totals[type].to_f) * 100  %></td>
         </tr>
       <% end %>
 
       <tr>
         <td><strong>Total</strong></td>
         <td><strong><%= @totals.values.inject(:+) %></strong></td>
+        <td><strong><%= (@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100 ) %></strong></td>
       </tr>
 
     </tablebody>
   </table>
 </div>
-
-<div class="col-sm-8">
-
-  <table class = "table table-hover" id="stats-table">
-    <tablebody>
-
-      <tr>
-        
-          <th>Type</th>
-          <th>% of All Crimes of this Type in Precinct</th>
-          <th>% of All Crimes of this Type</th>
-
-      </tr>
-
-      <% @totals.each do |type, total| %>
-        <tr>
-          <td><%= type.pluralize(2) %></td>
-          <td><%= (total / @precinct_totals[type].to_f) * 100  %></td>
-          
-        </tr>
-      <% end %>
-
-    </tablebody>
-  </table>
-
-</div>
-<!-- Section 2 -->
-<!--  
-<table class="table table-hover">
-  <tablebody>
-    <tr>
-      <th>Time Period</th>
-      <th>Type</th>
-      <th>Count</th>
-      <th></th>
-    </tr>
-
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-  </tablebody>
-</table> -->

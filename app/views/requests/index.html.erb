@@ -2,16 +2,15 @@
 
 <%= form_tag('/results', id: "search-form") do %>
 
-  <div class="col-sm-2 col-sm-offset-1">
+  <div class="col-sm-1 col-sm-offset-1">
     <%= label_tag :precinct %>
 
-    <%= text_field_tag :precinct, "N", class: "form-control" %>
-  </div>
+    <%= select_tag(:precinct, options_for_select(@precinct_options), class: "form-control selectpicker") %>
 
-  <div class="col-sm-2">
+
     <%= label_tag :beat %>
 
-    <%= text_field_tag :beat, "B3", class: "form-control" %>
+    <%= select_tag(:beat, options_for_select(@beat_options), include_blank: "All beats in precinct", class: "form-control selectpicker") %>
   </div>
 
   <div class="col-sm-2">
@@ -31,10 +30,11 @@
          {
            :order => [:day, :month, :year],
            :date_separator => date_separator,
+           :default => Date.new(2008, 1, 1),
            :start_year => 2014,
            :end_year => 2008
          },
-         {:class => 'form-control'}
+         {:class => 'form-control selectpicker'}
          ) %>
   
         </div>
@@ -63,7 +63,7 @@
            :start_year => 2014,
            :end_year => 2008
          },
-         {:class => 'form-control'}
+         {:class => 'form-control selectpicker'}
          ) %>
   
         </div>

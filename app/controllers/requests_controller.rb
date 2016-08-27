@@ -13,13 +13,17 @@ class RequestsController < ApplicationController
   }
 
   def index
-
+    @precinct_options = Precinct.all.map{ |p| [p.name, p.id] }
+    @beat_options = Beat.all.map{ |b| [b.name, b.id] }
+    @precinct = Precinct.new
+    @beat = Beat.new
   end
 
   def show
     @stats = SeattleCrimeStats.get(whitelisted_params)
     @totals = SeattleCrimeStats.totals(@stats)
-    @precinct_totals = PrecinctDatum.find_by_name(params[:precinct]).get_totals
+    precinct = Precinct.find_by_id(params[:precinct])
+    @precinct_totals = SeattleCrimeStats.get_time_period_totals(whitelisted_params)
   end
 
   def whitelisted_params
