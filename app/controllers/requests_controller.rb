@@ -10,27 +10,29 @@ class RequestsController < ApplicationController
     city_crimes
     from_and_to_dates(whitelisted_params)
 
-    unless @from_date < @to_date
+    # validate user input
+    if @from_date > @to_date
       flash[:danger] = "Please select a valid date range."
+      redirect_to root_path
+      return
+    elsif !params[:beat].empty? && !@precinct.beats.include?(Beat.find(params[:beat]))
+      flash[:danger] = "Please choose a valid police precinct and beat."
       redirect_to root_path
       return
     end
 
     if params[:beat].empty?
       @beat_name = all_beats_in_precinct_stringified(@precinct)
-      @precinct_totals = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
+      @precinct_totals_data = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
+      @precinct_totals = totals(precinct_totals_data)
       @totals = @precinct_totals
     else
       beat = Beat.find_by_id(params[:beat])
-      if @precinct.beats.include?(beat)
-        stats = SeattleCrimeStats.get(whitelisted_params)
-        @totals = SeattleCrimeStats.totals(stats)
-        @precinct_totals = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
-        @beat_name = beat.name
-      else
-        flash[:danger] = "Please choose a valid police precinct and beat."
-        redirect_to root_path
-      end
+      @stats = SeattleCrimeStats.beat_crimes(whitelisted_params)
+      @totals = totals(@stats)
+      @precinct_totals_data = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
+      @precinct_totals = totals(@precinct_totals_data)
+      @beat_name = beat.name
     end
 
   end
@@ -56,7 +58,7 @@ class RequestsController < ApplicationController
 
   def city_crimes
     data = SeattleCrimeStats.all_crimes_in_city_in_period(whitelisted_params)
-    @city_crimes = SeattleCrimeStats.totals(data)
+    @city_crimes = totals(data)
   end
 
 end

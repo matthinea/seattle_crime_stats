@@ -13,71 +13,36 @@ class SeattleCrimeStats
     from_date = convert_date(params[:from_date])
     to_date = convert_date(params[:to_date])
 
-    client.get("hapq-73pk.json", 
-              {
-                "$where" => "precinct = '#{precinct}' AND police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'" 
-                })
-  end
-
-  def self.all_crimes_in_precinct_in_period(params)
-    response = get_precinct_crimes(params)
-
-    totals = Hash.new(0)
-
-    response.each do |crime|
-      type = crime['crime_type']
-      count = crime['stat_value'].to_i
-      totals[type] += count
-    end
-
-    totals
+    collect_data_where("precinct = '#{precinct}' AND police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'")
   end
 
   def self.all_crimes_in_city_in_period(params)
     from_date = convert_date(params[:from_date])
     to_date = convert_date(params[:to_date])
-    client.get("hapq-73pk.json", 
-          {
-            "$where" => "report_date > '#{from_date}' AND report_date < '#{to_date}'" 
-            })
+    collect_data_where("report_date > '#{from_date}' AND report_date < '#{to_date}'")
 
   end
 
-  def self.get_beat_crimes(beat, from_date, to_date)
-    from_date = convert_date(from_date)
-    to_date = convert_date(to_date)
-    client.get("hapq-73pk.json", 
-              {
-                "$where" => "police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'" 
-                })
+  def self.beat_crimes(params)
+    from_date = convert_date(params[:from_date])
+    to_date = convert_date(params[:to_date])
+    beat = convert_beat(params[:beat])
+
+    collect_data_where("police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'" )
   end
 
-  def self.get_precinct_crimes(params)
+  def self.all_crimes_in_precinct_in_period(params)
     from_date = convert_date(params[:from_date])
     to_date = convert_date(params[:to_date])
     precinct = convert_precinct(params[:precinct])
 
-    client.get("hapq-73pk.json", 
-              {
-                "$where" => "precinct = '#{precinct}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'" 
-                })
+    collect_data_where("precinct = '#{precinct}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'")
   end
 
-  def self.totals(response)
-    stats = Hash.new(0) 
 
-    response.each do |crime|
-      type = crime['crime_type']
-      count = crime['stat_value'].to_i
-      stats[type] += count
-    end
-
-    stats
-  end
-
-  def self.get_beat_totals(beat)
+  def self.beat_totals(beat)
     client = SODA::Client.new({:domain => "data.seattle.gov", :app_token => ENV["X_APP_TOKEN"] })
-    response = client.get("hapq-73pk.json", { "$where" => "police_beat = '#{beat}'"})
+    collect_data_where("police_beat = '#{beat}'")
   end
 
 
@@ -111,9 +76,11 @@ class SeattleCrimeStats
     beat = BEATS[beat_num.to_i - 1]
   end
 
-
-  def self.client
-    SODA::Client.new({:domain => "data.seattle.gov", :app_token => ENV["X_APP_TOKEN"] })
+  def self.collect_data_where(query)
+    SODA::Client.new({:domain => "data.seattle.gov", :app_token => ENV["X_APP_TOKEN"] }).get("hapq-73pk.json", 
+              {
+                "$where" => query
+                })
   end
 
 end

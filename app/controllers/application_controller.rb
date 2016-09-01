@@ -7,4 +7,14 @@ class ApplicationController < ActionController::Base
     precinct.beats.map {|beat| beat.name}.join(", ")
   end
 
+  def totals(data_points)
+    stats = Hash.new(0) 
+    data_points.each do |crime|
+      type = crime['crime_type']
+      count = crime['stat_value'].to_i
+      stats[type] += count
+    end
+    stats
+  end
+
 end

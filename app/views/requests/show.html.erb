@@ -10,7 +10,7 @@
   <h1 id="results_header">Results for <span> Precinct <%= @precinct.name %>, Beat <%= @beat_name %></span> from <span> <%= Date.parse(@from_date).strftime('%a, %-d %b %Y') %> </span> to <span> <%= Date.parse(@to_date).strftime('%a, %-d %b %Y') %> </span></h1>
 </div>
 
-<div class="col-sm-4">
+<div class="col-sm-6">
   <table class = "table table-hover" id="totals-table">
     <tablebody>
 
@@ -19,7 +19,7 @@
           <th>Type</th>
           <th># of Crimes</th>
           <th>% of precinct crimes during same period </th>
-          <th>% of all crimes in Seattle during same period</th>
+          <th>% of city-wide crimes during same period</th>
 
       </tr>
 
@@ -27,15 +27,16 @@
         <tr>
           <td><%= type.pluralize(2) %></td>
           <td><%= total %></td>
-          <td><%= (total / @precinct_totals[type].to_f) * 100  %></td>
-          <td></td>
+          <td><%= ((total / @precinct_totals[type].to_f) * 100 ).round(2)%></td>
+          <td><%= ((total / @city_crimes[type].to_f) * 100).round(2)%></td>
         </tr>
       <% end %>
 
       <tr>
         <td><strong>Total</strong></td>
         <td><strong><%= @totals.values.inject(:+) %></strong></td>
-        <td><strong><%= (@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100 ) %></strong></td>
+        <td><strong><%= (@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100 ).round(2) %></strong></td>
+        <td><strong><%= (@totals.values.inject(:+) / @city_crimes.values.inject(:+).to_f * 100).round(2) %></strong></td>
       </tr>
 
     </tablebody>
