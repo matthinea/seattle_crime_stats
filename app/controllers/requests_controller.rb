@@ -1,25 +1,20 @@
 class RequestsController < ApplicationController
 
-  ENDPOINT = "https://data.seattle.gov/resource/hapq-73pk.json"
-
-  GRAND_TOTALS = {
-    "Homicide"=>145, 
-    "Rape"=>620, 
-    "Robbery"=>9656, 
-    "Assault"=>12415, 
-    "Larceny-Theft"=>139264, 
-    "Motor Vehicle Theft"=>23391, 
-    "Burglary"=>42795
-  }
-
   def index
     set_index_instance_variables
   end
 
   def show
     @precinct = Precinct.find_by_id(params[:precinct])
-    
-    set_from_and_to_dates(whitelisted_params)
+
+    city_crimes
+    from_and_to_dates(whitelisted_params)
+
+    unless @from_date < @to_date
+      flash[:danger] = "Please select a valid date range."
+      redirect_to root_path
+      return
+    end
 
     if params[:beat].empty?
       @beat_name = all_beats_in_precinct_stringified(@precinct)
@@ -33,7 +28,7 @@ class RequestsController < ApplicationController
         @precinct_totals = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
         @beat_name = beat.name
       else
-        flash[:error] = "Please choose a police beat in the precinct you have selected."
+        flash[:danger] = "Please choose a valid police precinct and beat."
         redirect_to root_path
       end
     end
@@ -54,9 +49,14 @@ class RequestsController < ApplicationController
     @beat = Beat.new
   end
 
-  def set_from_and_to_dates(params)
+  def from_and_to_dates(params)
     @from_date = SeattleCrimeStats.convert_date(params[:from_date])
     @to_date = SeattleCrimeStats.convert_date(params[:to_date])    
+  end
+
+  def city_crimes
+    data = SeattleCrimeStats.all_crimes_in_city_in_period(whitelisted_params)
+    @city_crimes = SeattleCrimeStats.totals(data)
   end
 
 end

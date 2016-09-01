@@ -18,7 +18,8 @@
         
           <th>Type</th>
           <th># of Crimes</th>
-          <th>% share of Crimes in Precinct during Same Period </th>
+          <th>% of precinct crimes during same period </th>
+          <th>% of all crimes in Seattle during same period</th>
 
       </tr>
 
@@ -27,6 +28,7 @@
           <td><%= type.pluralize(2) %></td>
           <td><%= total %></td>
           <td><%= (total / @precinct_totals[type].to_f) * 100  %></td>
+          <td><%= (total / </td>
         </tr>
       <% end %>
 

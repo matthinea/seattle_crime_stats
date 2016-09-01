@@ -33,6 +33,16 @@ class SeattleCrimeStats
     totals
   end
 
+  def self.all_crimes_in_city_in_period(params)
+    from_date = convert_date(params[:from_date])
+    to_date = convert_date(params[:to_date])
+    client.get("hapq-73pk.json", 
+          {
+            "$where" => "report_date > '#{from_date}' AND report_date < '#{to_date}'" 
+            })
+
+  end
+
   def self.get_beat_crimes(beat, from_date, to_date)
     from_date = convert_date(from_date)
     to_date = convert_date(to_date)
