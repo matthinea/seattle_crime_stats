@@ -29,20 +29,24 @@
 </head>
 <body>
 <div class="container">
+
   <div class="row">
-    
-       <% flash.each do |type, message| %>
-      <div class="alert alert-<%= "#{type}" %> alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <%= message %>
-      </div>
-    <% end %>
+    <div class="col-xs-12">
+
+      <% flash.each do |type, message| %>
+        <div class="alert alert-<%= "#{type}" %> alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
     <%= yield %>
 
-  </div>
-  <div class="row" id="beat-map">
-    <%= image_tag ("beat-map-2.png") %>
+    <div class="col-xs-12" id="beat-map">
+      <%= image_tag ("beat-map-2.png") %>
+    </div>
+
   </div>
 </div>
 

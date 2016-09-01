@@ -8,10 +8,11 @@ class RequestsController < ApplicationController
     @precinct = Precinct.find_by_id(params[:precinct])
 
     city_crimes
-    from_and_to_dates(whitelisted_params)
+    from_date = convert_date(params[:from_date])
+    to_date = convert_date(params[:to_date])
 
     # validate user input
-    if @from_date > @to_date
+    if from_date > to_date
       flash[:danger] = "Please select a valid date range."
       redirect_to root_path
       return
@@ -24,7 +25,7 @@ class RequestsController < ApplicationController
     if params[:beat].empty?
       @beat_name = all_beats_in_precinct_stringified(@precinct)
       @precinct_totals_data = SeattleCrimeStats.all_crimes_in_precinct_in_period(whitelisted_params)
-      @precinct_totals = totals(precinct_totals_data)
+      @precinct_totals = totals(@precinct_totals_data)
       @totals = @precinct_totals
     else
       beat = Beat.find_by_id(params[:beat])
@@ -35,6 +36,8 @@ class RequestsController < ApplicationController
       @beat_name = beat.name
     end
 
+    @precinct_options = Precinct.all.map{ |p| [p.name, p.id] }
+    @beat_options = Beat.all.map{ |b| [b.name, b.id] }
   end
 
 
@@ -51,9 +54,8 @@ class RequestsController < ApplicationController
     @beat = Beat.new
   end
 
-  def from_and_to_dates(params)
-    @from_date = SeattleCrimeStats.convert_date(params[:from_date])
-    @to_date = SeattleCrimeStats.convert_date(params[:to_date])    
+  def convert_date(date)
+    SeattleCrimeStats.convert_date(date)
   end
 
   def city_crimes
