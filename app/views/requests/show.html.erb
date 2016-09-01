@@ -7,7 +7,7 @@
 </style>
 
 <div class="col-xs-12">
-  <h1 id="results_header">Results for <span> Precinct <%= @stats[0].precinct %>, Beat <%= @stats[0].police_beat %></span> from <span> <%= Date.parse(@stats[0].report_date).strftime('%a, %-d %b %Y') %> </span> to <span> <%= Date.parse(@stats[-1].report_date).strftime('%a, %-d %b %Y') %> </span></h1>
+  <h1 id="results_header">Results for <span> Precinct <%= @precinct.name %>, Beat <%= @beat_name %></span> from <span> <%= Date.parse(@from_date).strftime('%a, %-d %b %Y') %> </span> to <span> <%= Date.parse(@to_date).strftime('%a, %-d %b %Y') %> </span></h1>
 </div>
 
 <div class="col-sm-4">

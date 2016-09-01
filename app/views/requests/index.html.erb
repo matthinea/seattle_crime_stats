@@ -2,7 +2,7 @@
 
 <%= form_tag('/results', id: "search-form") do %>
 
-  <div class="col-sm-1 col-sm-offset-1">
+  <div class="col-sm-2 col-sm-offset-1">
     <%= label_tag :precinct %>
 
     <%= select_tag(:precinct, options_for_select(@precinct_options), class: "form-control selectpicker") %>

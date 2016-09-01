@@ -19,7 +19,7 @@ class SeattleCrimeStats
                 })
   end
 
-  def self.get_time_period_totals(params)
+  def self.all_crimes_in_precinct_in_period(params)
     response = get_precinct_crimes(params)
 
     totals = Hash.new(0)
