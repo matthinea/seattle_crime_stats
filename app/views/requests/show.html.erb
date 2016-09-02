@@ -13,15 +13,21 @@
             <th># of Crimes</th>
             <th>% of precinct crimes during same period </th>
             <th>% of city-wide crimes during same period</th>
-
+            <th>Average number of crimes per month </th>
+            <th>Avg. # of crimes/month from 2008-2014</th>
         </tr>
 
         <% @totals.each do |type, total| %>
           <tr>
             <td><%= type.pluralize(2) %></td>
             <td><%= total %></td>
-            <td><%= ((total / @precinct_totals[type].to_f) * 100 ).round(2)%></td>
-            <td><%= ((total / @city_crimes[type].to_f) * 100).round(2)%></td>
+            <% total = total.to_f %>
+            <td><%= ((total / @precinct_totals[type]) * 100 ).round(2)%></td>
+            <td><%= ((total / @city_crimes[type]) * 100).round(2)%></td>
+            <td><%= (total / @num_months).round(2) %></td>
+            <td>
+              <%= (@all_crimes_in_dataset_in_area[type] / 72.0).round(2) %>
+            </td>
           </tr>
         <% end %>
 
@@ -30,8 +36,9 @@
           <td><strong><%= @totals.values.inject(:+) %></strong></td>
           <td><strong><%= (@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100 ).round(2) %></strong></td>
           <td><strong><%= (@totals.values.inject(:+) / @city_crimes.values.inject(:+).to_f * 100).round(2) %></strong></td>
+          <td><strong><%= (@totals.values.inject(:+) / @num_months.to_f).round(2) %></strong></td>
+          <td><strong><%= (@all_crimes_in_dataset_in_area.values.inject(:+) / 72.0).round(2) %></strong></td>
         </tr>
-
       </tablebody>
     </table>
   </div>

@@ -18,3 +18,20 @@ precinct_beats.each do |precinct, beats|
     precinct.save
   end
 end
+
+# store total # of each crime type in beat attributes
+
+
+Beat.all.each do |beat|
+  beat_totals_data = SeattleCrimeStats.beat_totals(beat.name)
+  beat_totals = Data.totals(beat_totals_data)
+  
+  beat.homicides = beat_totals["Homicide"]
+  beat.rapes = beat_totals["Rape"]
+  beat.robberies = beat_totals["Robbery"]
+  beat.assaults = beat_totals["Assault"]
+  beat.larceny_thefts = beat_totals["Larceny-Theft"]
+  beat.motor_vehicle_thefts = beat_totals["Motor Vehicle Theft"]
+  beat.burglaries = beat_totals["Burglary"]
+  beat.save!
+end

@@ -1,5 +1,34 @@
 class Data
 
+  # # for determining whether beat(s) experienced higher or lower
+  # CITYWIDE_DATASET_TOTALS = {
+    # "Homicide"=>141, 
+    # "Rape"=>610, 
+    # "Robbery"=>9554, 
+    # "Assault"=>12287, 
+    # "Larceny-Theft"=>137660, 
+    # "Motor Vehicle Theft"=>23052, 
+    # "Burglary"=>42270
+  # }
+
+  # NUM_MONTHS_IN_DATASET = 71
+
+  # CITYWIDE_MONTHLY_AVGS_BY_TYPE = {}
+
+  # CITYWIDE_DATASET_TOTALS.each do |type, num_crimes| 
+  #   CITYWIDE_MONTHLY_AVGS_BY_TYPE[type] = num_crimes / NUM_MONTHS_IN_DATASET
+  # end
+
+  def self.totals(data_points)
+    stats = Hash.new(0) 
+    data_points.each do |crime|
+      type = crime['crime_type']
+      count = crime['stat_value'].to_i
+      stats[type] += count
+    end
+    stats
+  end
+
   def self.precincts_with_beats
     n = ["B", "J", "N", "L", "U"]
     w = ["Q", "D", "M", "K"]

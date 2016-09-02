@@ -13,13 +13,13 @@ class SeattleCrimeStats
     from_date = convert_date(params[:from_date])
     to_date = convert_date(params[:to_date])
 
-    collect_data_where("precinct = '#{precinct}' AND police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'")
+    collect_data_where("precinct = '#{precinct}' AND police_beat = '#{beat}' AND report_date >= '#{from_date}' AND report_date <= '#{to_date}'")
   end
 
   def self.all_crimes_in_city_in_period(params)
     from_date = convert_date(params[:from_date])
     to_date = convert_date(params[:to_date])
-    collect_data_where("report_date > '#{from_date}' AND report_date < '#{to_date}'")
+    collect_data_where("report_date >= '#{from_date}' AND report_date <= '#{to_date}'")
 
   end
 
@@ -28,7 +28,7 @@ class SeattleCrimeStats
     to_date = convert_date(params[:to_date])
     beat = convert_beat(params[:beat])
 
-    collect_data_where("police_beat = '#{beat}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'" )
+    collect_data_where("police_beat = '#{beat}' AND report_date >= '#{from_date}' AND report_date <= '#{to_date}'" )
   end
 
   def self.all_crimes_in_precinct_in_period(params)
@@ -36,7 +36,7 @@ class SeattleCrimeStats
     to_date = convert_date(params[:to_date])
     precinct = convert_precinct(params[:precinct])
 
-    collect_data_where("precinct = '#{precinct}' AND report_date > '#{from_date}' AND report_date < '#{to_date}'")
+    collect_data_where("precinct = '#{precinct}' AND report_date >= '#{from_date}' AND report_date <= '#{to_date}'")
   end
 
 
@@ -44,8 +44,6 @@ class SeattleCrimeStats
     client = SODA::Client.new({:domain => "data.seattle.gov", :app_token => ENV["X_APP_TOKEN"] })
     collect_data_where("police_beat = '#{beat}'")
   end
-
-
 
 
 
