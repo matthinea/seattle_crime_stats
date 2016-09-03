@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+.margin-top {
+  margin-top: 20px;
+}
 
 body {
   background-color: #F0F0F0 !important;
@@ -39,4 +42,13 @@ body {
   td strong {
     font-size: 1.12em;
   }
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+th {
+  width: 20px !important;
 }
