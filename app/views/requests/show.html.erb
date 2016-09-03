@@ -8,36 +8,64 @@
       <tablebody>
 
         <tr>
-          
             <th>Type</th>
             <th># of Crimes</th>
             <th>% of precinct crimes during same period </th>
             <th>% of city-wide crimes during same period</th>
             <th>Average number of crimes per month </th>
             <th>Avg. # of crimes/month from 2008-2014</th>
+            <th>% uptick/downtick</th>
         </tr>
 
         <% @totals.each do |type, total| %>
+
           <tr>
             <td><%= type.pluralize(2) %></td>
             <td><%= total %></td>
             <% total = total.to_f %>
-            <td><%= ((total / @precinct_totals[type]) * 100 ).round(2)%></td>
-            <td><%= ((total / @city_crimes[type]) * 100).round(2)%></td>
-            <td><%= (total / @num_months).round(2) %></td>
+            <td><%= number_with_precision((total / @precinct_totals[type]) * 100, precision: 2) %></td>
+            <td><%= number_with_precision((total / @city_crimes[type]) * 100, precision: 2) %></td>
+            <td><% period_rate = (total / @num_months) %>
+              <%= number_with_precision(period_rate, precision: 2) %>
+            </td>
             <td>
-              <%= (@all_crimes_in_dataset_in_area[type] / 72.0).round(2) %>
+              <% overall_rate = (@all_crimes_in_dataset_in_area[type] / months_in_dataset) %>
+              <%= number_with_precision(overall_rate, precision: 2) %>
+            </td>
+            <td> <% tick = compare(period_rate, overall_rate) %> 
+              <% if tick > 0 %>
+                <%= image_tag("red_up_arrow.svg.png", size: "16x10") %>
+              <% else %>
+                <%= image_tag("green_down_arrow.svg.png", size: "16x10") %>
+              <% end %>
+              <%= number_with_precision(tick, precision: 2) %>
             </td>
           </tr>
+
         <% end %>
 
         <tr>
           <td><strong>Total</strong></td>
-          <td><strong><%= @totals.values.inject(:+) %></strong></td>
-          <td><strong><%= (@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100 ).round(2) %></strong></td>
-          <td><strong><%= (@totals.values.inject(:+) / @city_crimes.values.inject(:+).to_f * 100).round(2) %></strong></td>
-          <td><strong><%= (@totals.values.inject(:+) / @num_months.to_f).round(2) %></strong></td>
-          <td><strong><%= (@all_crimes_in_dataset_in_area.values.inject(:+) / 72.0).round(2) %></strong></td>
+          <td><strong>
+            <%= @totals.values.inject(:+) %>
+          </strong></td>
+          <td><strong>
+            <%= number_with_precision(@totals.values.inject(:+) / @precinct_totals.values.inject(:+).to_f * 100, precision: 2) %>
+          </strong></td>
+          <td><strong>
+            <%= number_with_precision(@totals.values.inject(:+) / @city_crimes.values.inject(:+).to_f * 100, precision: 2) %>
+          </strong></td>
+          <td><strong>
+            <% period_total_avg_crime_rate = (@totals.values.inject(:+) / @num_months.to_f) %>
+            <%= number_with_precision(period_total_avg_crime_rate, precision: 2) %>     
+          </strong></td>
+          <td><strong>
+            <% dataset_total_avg_crime_rate = (@all_crimes_in_dataset_in_area.values.inject(:+) / months_in_dataset) %>
+            <%= number_with_precision(dataset_total_avg_crime_rate, precision: 2) %>    
+          </strong></td>
+          <td><strong>
+            <%= number_with_precision(compare(period_total_avg_crime_rate, dataset_total_avg_crime_rate), precision: 2) %>
+          </strong></td>
         </tr>
       </tablebody>
     </table>
